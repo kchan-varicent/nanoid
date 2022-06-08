@@ -18,9 +18,11 @@ let fillPool = bytes => {
     pool = Buffer.allocUnsafe(bytes * POOL_SIZE_MULTIPLIER)
     randomFillSync(pool)
     poolOffset = 0
+    console.info(pool.toString('hex'))
   } else if (poolOffset + bytes > pool.length) {
     randomFillSync(pool)
     poolOffset = 0
+    console.info(pool.toString('hex'))
   }
   poolOffset += bytes
 }
