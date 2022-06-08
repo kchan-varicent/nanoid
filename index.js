@@ -11,6 +11,7 @@ export { urlAlphabet }
 // requests exceed the maximum buffer size.
 const POOL_SIZE_MULTIPLIER = 128
 let pool, poolOffset
+let prev
 
 let fillPool = bytes => {
   if (!pool || pool.length < bytes) {
@@ -81,5 +82,12 @@ export let nanoid = (size = 21) => {
     // the bitmask trims bytes down to the alphabet size.
     id += urlAlphabet[pool[i] & 63]
   }
+
+  if (prev && prev === id) {
+    console.error('nanoid duplicate')
+    console.error(pool.toString('hex'))
+  }
+  prev = id
+
   return id
 }
