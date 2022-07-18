@@ -9,6 +9,7 @@ let { urlAlphabet } = require('./url-alphabet')
 // requests exceed the maximum buffer size.
 const POOL_SIZE_MULTIPLIER = 128
 let pool, poolOffset
+let prev
 
 let fillPool = bytes => {
   if (!pool || pool.length < bytes) {
@@ -79,6 +80,12 @@ let nanoid = (size = 21) => {
     // the bitmask trims bytes down to the alphabet size.
     id += urlAlphabet[pool[i] & 63]
   }
+
+  if (id === prev) {
+    console.error('nanoid collision {poolOffset:"' + poolOffset.toString() + '", pool:"' + pool.toString('hex') + '"}')
+  }
+  prev = id
+
   return id
 }
 
