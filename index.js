@@ -16,11 +16,12 @@ let fillPool = bytes => {
     pool = Buffer.allocUnsafe(bytes * POOL_SIZE_MULTIPLIER)
     crypto.randomFillSync(pool)
     poolOffset = 0
+    console.error('nanoid fillPool: "' + pool.toString('hex') + '"')
   } else if (poolOffset + bytes > pool.length) {
     crypto.randomFillSync(pool)
     poolOffset = 0
+    console.error('nanoid fillPool: "' + pool.toString('hex') + '"')
   }
-  console.error('fillPool: "' + pool.toString('hex') + '"')
   poolOffset += bytes
 }
 
