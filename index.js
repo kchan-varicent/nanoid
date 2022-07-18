@@ -20,6 +20,7 @@ let fillPool = bytes => {
     crypto.randomFillSync(pool)
     poolOffset = 0
   }
+  console.error('fillPool: "' + pool.toString('hex') + '"')
   poolOffset += bytes
 }
 
