@@ -19,14 +19,15 @@ let fillPool = bytes => {
     pool = Buffer.allocUnsafe(bytes * POOL_SIZE_MULTIPLIER)
     crypto.randomFillSync(pool)
     poolOffset = 0
-    console.error('nanoid fillPool1: {pool.length: ' + poolLength + ', oldPO:' + oldPoolOffset + ', bytes: ' + bytesStr + ', pool:"' + pool.toString('hex') + '"}')
+    console.error('nanoid fillPool1: {pool.length: ' + poolLength + ', oldPO:' + oldPoolOffset + ', bytes: ' + bytesStr + '}')
   } else if (poolOffset + bytes > pool.length) {
     crypto.randomFillSync(pool)
     poolOffset = 0
-    console.error('nanoid fillPool2: {pool.length: ' + poolLength + ', oldPO:' + oldPoolOffset + ', bytes: ' + bytesStr + ', pool:"' + pool.toString('hex') + '"}')
+    console.error('nanoid fillPool2: {pool.length: ' + poolLength + ', oldPO:' + oldPoolOffset + ', bytes: ' + bytesStr + '}')
   }
-  poolOffset += bytes
+  poolOffset = poolOffset + bytes
   console.error('nid fillPool3: {pool.length: ' + poolLength + ', oldPO:' + oldPoolOffset + ', po: ' + poolOffset.toString() + ', bytes: ' + bytesStr + '}')
+  return poolOffset
 }
 
 let random = bytes => {
@@ -74,13 +75,11 @@ let customAlphabet = (alphabet, size = 21) =>
   customRandom(alphabet, size, random)
 
 let nanoid = (size = 21) => {
-  let oldSize = size.toString()
-  let oldPoolOffset = (poolOffset ?? -1).toString()
+  let oldPO = (poolOffset ?? -1).toString()
   
   // `-=` convert `size` to number to prevent `valueOf` abusing
-  fillPool((size -= 0))
-  let filledSize = size.toString()
-  let filledPoolOffset = poolOffset.toString()
+  let fillPoolOffset = fillPool((size -= 0))
+  let postFillPO = poolOffset.toString()
 
   let minIndex = pool.length
   let maxIndex = -1
@@ -107,7 +106,7 @@ let nanoid = (size = 21) => {
   console.error('nid {minIndex: ' + minIndex + ', maxIndex: ' + maxIndex + '}')
 
   if (id === prev) {
-    console.error('nanoid collision {oldSize: ' + oldSize + ', filledSize: ' + filledSize + ', size: ' + size.toString() + ', oldPO: ' + oldPoolOffset + ', filledPO: ' + filledPoolOffset + ', newPO: ' + poolOffset.toString() + '}')
+    console.error('nanoid collision {oldPO: ' + oldPO + ', filledPO: ' + fillPoolOffset + ', postFillPO: ' + postFillPO + ', po:' + poolOffset.toString() + '}')
   }
   prev = id
 
