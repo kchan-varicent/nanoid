@@ -14,19 +14,19 @@ let prev
 let fillPool = bytes => {
   let bytesStr = bytes.toString()
   let poolLength = (pool ? pool.length : -1).toString()
-  let oldPoolOffset = poolOffset.toString()
+  let oldPoolOffset = (poolOffset ?? -1).toString()
   if (!pool || pool.length < bytes) {
     pool = Buffer.allocUnsafe(bytes * POOL_SIZE_MULTIPLIER)
     crypto.randomFillSync(pool)
     poolOffset = 0
-    console.error('nanoid fillPool1: {pool.length: ' + poolLength + ', oldPoolOffset:' + oldPoolOffset + ', bytes: ' + bytesStr + ', pool:"' + pool.toString('hex') + '"}')
+    console.error('nanoid fillPool1: {pool.length: ' + poolLength + ', oldPO:' + oldPoolOffset + ', bytes: ' + bytesStr + ', pool:"' + pool.toString('hex') + '"}')
   } else if (poolOffset + bytes > pool.length) {
     crypto.randomFillSync(pool)
     poolOffset = 0
-    console.error('nanoid fillPool2: {pool.length: ' + poolLength + ', oldPoolOffset:' + oldPoolOffset + ', bytes: ' + bytesStr + ', pool:"' + pool.toString('hex') + '"}')
+    console.error('nanoid fillPool2: {pool.length: ' + poolLength + ', oldPO:' + oldPoolOffset + ', bytes: ' + bytesStr + ', pool:"' + pool.toString('hex') + '"}')
   }
   poolOffset += bytes
-  console.error('fillPool3: {pool.length: ' + poolLength + ', oldPoolOffset:' + oldPoolOffset + ', bytes: ' + bytesStr + '}')
+  console.error('fillPool3: {pool.length: ' + poolLength + ', oldPO:' + oldPoolOffset + ', po: ' + poolOffset.toString() + ', bytes: ' + bytesStr + '}')
 }
 
 let random = bytes => {
@@ -75,7 +75,7 @@ let customAlphabet = (alphabet, size = 21) =>
 
 let nanoid = (size = 21) => {
   let oldSize = size.toString()
-  let oldPoolOffset = poolOffset.toString()
+  let oldPoolOffset = (poolOffset ?? -1).toString()
   
   // `-=` convert `size` to number to prevent `valueOf` abusing
   fillPool((size -= 0))
