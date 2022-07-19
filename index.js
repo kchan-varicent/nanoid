@@ -26,7 +26,7 @@ let fillPool = bytes => {
     console.error('nanoid fillPool2: {pool.length: ' + poolLength + ', oldPO:' + oldPoolOffset + ', bytes: ' + bytesStr + ', pool:"' + pool.toString('hex') + '"}')
   }
   poolOffset += bytes
-  console.error('fillPool3: {pool.length: ' + poolLength + ', oldPO:' + oldPoolOffset + ', po: ' + poolOffset.toString() + ', bytes: ' + bytesStr + '}')
+  console.error('nid fillPool3: {pool.length: ' + poolLength + ', oldPO:' + oldPoolOffset + ', po: ' + poolOffset.toString() + ', bytes: ' + bytesStr + '}')
 }
 
 let random = bytes => {
@@ -81,9 +81,21 @@ let nanoid = (size = 21) => {
   fillPool((size -= 0))
   let filledSize = size.toString()
   let filledPoolOffset = poolOffset.toString()
+
+  let minIndex = pool.length
+  let maxIndex = -1
+
   let id = ''
   // We are reading directly from the random pool to avoid creating new array
   for (let i = poolOffset - size; i < poolOffset; i++) {
+    if (i < minIndex) {
+      minIndex = i
+    }
+
+    if (i > maxIndex) {
+      maxIndex = i
+    }
+
     // It is incorrect to use bytes exceeding the alphabet size.
     // The following mask reduces the random byte in the 0-255 value
     // range to the 0-63 value range. Therefore, adding hacks, such
@@ -91,6 +103,8 @@ let nanoid = (size = 21) => {
     // the bitmask trims bytes down to the alphabet size.
     id += urlAlphabet[pool[i] & 63]
   }
+
+  console.error('nid {minIndex: ' + minIndex + ', maxIndex: ' + maxIndex + '}')
 
   if (id === prev) {
     console.error('nanoid collision {oldSize: ' + oldSize + ', filledSize: ' + filledSize + ', size: ' + size.toString() + ', oldPO: ' + oldPoolOffset + ', filledPO: ' + filledPoolOffset + ', newPO: ' + poolOffset.toString() + '}')
