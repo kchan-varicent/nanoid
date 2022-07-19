@@ -8,7 +8,8 @@ let { urlAlphabet } = require('./url-alphabet')
 // request size by this multiplier. The pool is enlarged if subsequent
 // requests exceed the maximum buffer size.
 const POOL_SIZE_MULTIPLIER = 128
-let pool, poolOffset
+let pool
+let poolOffset
 let prev
 
 let fillPool = bytes => {
@@ -79,7 +80,7 @@ let nanoid = (size = 21) => {
   
   // `-=` convert `size` to number to prevent `valueOf` abusing
   let fillPoolOffset = fillPool((size -= 0))
-  poolOffset = fillPoolOffset
+  // poolOffset = fillPoolOffset
   let postFillPO = poolOffset.toString()
 
   let minIndex = pool.length
