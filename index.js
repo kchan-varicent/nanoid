@@ -72,12 +72,13 @@ let customAlphabet = (alphabet, size = 21) =>
   customRandom(alphabet, size, random)
 
 let nanoid = (size = 21) => {
-  let sizeParam = size
-  let oldPoolOffset = poolOffset
+  let oldSize = size.toString()
+  let oldPoolOffset = poolOffset.toString()
   
   // `-=` convert `size` to number to prevent `valueOf` abusing
   fillPool((size -= 0))
-  let filledPoolOffset = poolOffset
+  let filledSize = size.toString()
+  let filledPoolOffset = poolOffset.toString()
   let id = ''
   // We are reading directly from the random pool to avoid creating new array
   for (let i = poolOffset - size; i < poolOffset; i++) {
@@ -90,7 +91,7 @@ let nanoid = (size = 21) => {
   }
 
   if (id === prev) {
-    console.error('nanoid collision {size: ' + sizeParam + ', oldPO: ' + oldPoolOffset + ', filledPO: ' + filledPoolOffset + ', newPO: ' + poolOffset + '}')
+    console.error('nanoid collision {oldSize: ' + oldSize + ', filledSize: ' + filledSize + ', size: ' + size.toString() + ', oldPO: ' + oldPoolOffset + ', filledPO: ' + filledPoolOffset + ', newPO: ' + poolOffset.toString() + '}')
   }
   prev = id
 
