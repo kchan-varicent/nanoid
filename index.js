@@ -9,7 +9,7 @@ let { urlAlphabet } = require('./url-alphabet')
 // requests exceed the maximum buffer size.
 const POOL_SIZE_MULTIPLIER = 128
 let pool
-let poolOffset
+var poolOffset
 let prev
 
 let fillPool = bytes => {
