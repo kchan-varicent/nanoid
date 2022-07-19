@@ -12,15 +12,18 @@ let pool, poolOffset
 let prev
 
 let fillPool = bytes => {
+  let poolLength = pool ? pool.length : -1
+  let oldPoolOffset = poolOffset
   if (!pool || pool.length < bytes) {
     pool = Buffer.allocUnsafe(bytes * POOL_SIZE_MULTIPLIER)
+    let pool
     crypto.randomFillSync(pool)
     poolOffset = 0
-    console.error('nanoid fillPool: "' + pool.toString('hex') + '"')
+    console.error('nanoid fillPool1: {pool.length: ' + poolLength + ', oldPoolOffset:' + oldPoolOffset + ', bytes: ' + bytes + ', pool:"' + pool.toString('hex') + '"}')
   } else if (poolOffset + bytes > pool.length) {
     crypto.randomFillSync(pool)
     poolOffset = 0
-    console.error('nanoid fillPool: "' + pool.toString('hex') + '"')
+    console.error('nanoid fillPool2: {pool.length: ' + poolLength + ', oldPoolOffset:' + oldPoolOffset + ', bytes: ' + bytes + ', pool:"' + pool.toString('hex') + '"}')
   }
   poolOffset += bytes
 }
@@ -70,6 +73,9 @@ let customAlphabet = (alphabet, size = 21) =>
   customRandom(alphabet, size, random)
 
 let nanoid = (size = 21) => {
+  let sizeParam = size
+  let oldPoolOffset = poolOffset
+
   // `-=` convert `size` to number to prevent `valueOf` abusing
   fillPool((size -= 0))
   let id = ''
@@ -84,7 +90,7 @@ let nanoid = (size = 21) => {
   }
 
   if (id === prev) {
-    console.error('nanoid collision {poolOffset:"' + poolOffset.toString() + '", pool:"' + pool.toString('hex') + '"}')
+    console.error('nanoid collision {size: ' + sizeParam + ', oldPO: ' + oldPoolOffset + ', newPO: ' + poolOffset + '}')
   }
   prev = id
 
