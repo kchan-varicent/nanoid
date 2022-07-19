@@ -1,3 +1,5 @@
+"use strict";
+
 let crypto = require('crypto')
 
 let { urlAlphabet } = require('./url-alphabet')
