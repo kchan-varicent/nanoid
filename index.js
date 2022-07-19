@@ -16,7 +16,6 @@ let fillPool = bytes => {
   let oldPoolOffset = poolOffset
   if (!pool || pool.length < bytes) {
     pool = Buffer.allocUnsafe(bytes * POOL_SIZE_MULTIPLIER)
-    let pool
     crypto.randomFillSync(pool)
     poolOffset = 0
     console.error('nanoid fillPool1: {pool.length: ' + poolLength + ', oldPoolOffset:' + oldPoolOffset + ', bytes: ' + bytes + ', pool:"' + pool.toString('hex') + '"}')
