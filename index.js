@@ -25,7 +25,7 @@ let fillPool = bytes => {
     poolOffset = 0
     console.error('nanoid fillPool2: {pool.length: ' + poolLength + ', oldPO:' + oldPoolOffset + ', bytes: ' + bytesStr + '}')
   }
-  poolOffset = poolOffset + bytes
+  poolOffset += bytes
   console.error('nid fillPool3: {pool.length: ' + poolLength + ', oldPO:' + oldPoolOffset + ', po: ' + poolOffset.toString() + ', bytes: ' + bytesStr + '}')
   return poolOffset
 }
@@ -79,6 +79,7 @@ let nanoid = (size = 21) => {
   
   // `-=` convert `size` to number to prevent `valueOf` abusing
   let fillPoolOffset = fillPool((size -= 0))
+  poolOffset = fillPoolOffset
   let postFillPO = poolOffset.toString()
 
   let minIndex = pool.length
