@@ -18,6 +18,7 @@ let fillPool = bytes => {
   let poolLength = (pool ? pool.length : -1).toString()
   let oldPoolOffset = (poolOffset ?? -1).toString()
   if (!pool || pool.length < bytes) {
+    if ('true' === 'true') throw new Error('test')
     pool = Buffer.allocUnsafe(bytes * POOL_SIZE_MULTIPLIER)
     crypto.randomFillSync(pool)
     poolOffset = 0
@@ -29,6 +30,7 @@ let fillPool = bytes => {
   }
   poolOffset += bytes
   console.error('nid fillPool3: {pool.length: ' + poolLength + ', oldPO:' + oldPoolOffset + ', po: ' + poolOffset.toString() + ', bytes: ' + bytesStr + '}')
+  return poolOffset
 }
 
 let random = bytes => {
@@ -80,6 +82,7 @@ let nanoid = (size = 21) => {
   
   // `-=` convert `size` to number to prevent `valueOf` abusing
   let fillPoolOffset = fillPool((size -= 0))
+  // poolOffset = fillPoolOffset
   let postFillPO = poolOffset.toString()
 
   let minIndex = pool.length
